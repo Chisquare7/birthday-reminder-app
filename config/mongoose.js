@@ -2,18 +2,18 @@ const mongoose = require('mongoose')
 require("dotenv").config();
 
 
-function databaseConnect() {
-    mongoose.connect(process.env.DB_URL, {
-        serverSelectionTimeoutMS: 60000,
-    })
+async function databaseConnect() {
+    try {
 
-    mongoose.connection.on("connected", () => {
+        await mongoose.connect(process.env.DB_URL, {
+          serverSelectionTimeoutMS: 60000,
+        });
+        
         console.log("Database connection successful");
-    })
+    } catch (error) {
 
-    mongoose.connection.on("error", (error) => {
-        console.log("Database connection failed", error)
-    })
+        console.log("Database connection failed", error);
+    }
 }
 
 module.exports = { databaseConnect };

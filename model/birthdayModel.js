@@ -1,20 +1,22 @@
-const mongoose = require("mongoose")
-// const shortid = require("shortid")
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
-const birthdaySchema = new Schema({
-    // _id: {
-    //     type: String,
-    //     default: shortid.generate(),
-    //     unique: true,
-    // },
-
+const birthdaySchema = new Schema(
+  {
     username: { type: String, required: true },
     email: { type: String, required: true },
-    dob: {type: Date, required: true}
-})
+    dob: { type: mongoose.Schema.Types.Date, required: true },
+  },
+  { collection: "birthdays" }
+);
 
-const birthdayModel = mongoose.model("Birthday", birthdaySchema);
+birthdaySchema.pre('save', function (next) {
+  // convert the dob field to a local date string
+  this.dob = this.dob.toLocaleDateString();
+  next();
+});
+
+const birthdayModel = mongoose.model("birthdays", birthdaySchema);
 
 module.exports = birthdayModel;

@@ -1,31 +1,42 @@
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
-const birthdayEmail = (emails) => {
+const birthdayEmail = async (emails, celebrants) => {
 
     const mailTransporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            user: "your-email@gmail.com",
-            pass: "your-email-password",
-        }
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.myNodemailerUser,
+        pass: process.env.myNodemailerPass,
+      },
     });
 
-    const mailStructures = {
-        from: "your-email@gmail.com",
-        to: emails.join(', '),
-        subject: "Happy Birthday!",
-        text: "Wishing you a great and fantanstic new year, as you celebrate your birthday",
-    };
+    const results = await Promise.all(celebrants.map(async (celebrant) => {
 
-    console.log("Emails to send:", emails);
-    
-    mailTransporter.sendMail(mailStructures, (error, info) => {
-        if (error) {
-            console.error("Oops! Error encountered when sending email:", error);
-        } else {
-            console.log("Hurray! Email sent successfully:", info.response)
+        const year = new Date().getFullYear();
+        const {username, email} = celebrant
+
+        const mailStructures = {
+          from: "From CelebrateMe app <chijiokechibuike.f@gmail.com>",
+          to: emails.join(","),
+          subject: `Memorable Moments Reminder! ${username}`,
+          text: `Happy birthday, ${username}! Wishing you a great and fantastic new year, as you celebrate your birthday in ${year}.`,
+          html: `<p>Another year wiser, another year more fabulous! Here's to embracing the journey ahead with grace and gratitude. <p style="font-weight:bold;">Happy birthday!</p></p>`,
+        };
+
+        try {
+          const info = await mailTransporter.sendMail(mailStructures);
+          console.log("Hurray! Email sent successfully:", info.response);
+        } catch (error) {
+          console.error("Oops! Error encountered when sending email:", error);
         }
-    })
+    }))
+
+    return results
+    
 }
 
 
