@@ -28,8 +28,8 @@ npm install
   - Define the following environment variables in the .env file:
     - PORT: Port number for the application (e.g., 3000).
     - DB_URL: MongoDB connection URL.
-    - MY_NODEMAILER_USER: Your email address for sending reminder emails.
-    - MY_NODEMAILER_PASS: an smtp app-specific password (recommend: gmail).
+    - myNodemailerUser: Your email address for sending reminder emails.
+    - myNodemailerPass: an smtp app-specific password (recommend: gmail).
 5. Start the application:
 ``` markdown
 npm start
