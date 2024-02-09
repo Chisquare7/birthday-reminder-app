@@ -15,9 +15,14 @@ mongoose.set("debug", true);
 databaseConnect();
 
 app.use(bodyParser.json());
+app.use(express.static("public"));
 app.use("/", birthdayRoute);
 
-cron.scheduleJob("0 2 4 * * *", async function () {
+app.get("/", async (req, res) => {
+  res.sendFile(__dirname + "/public/index.html")
+})
+
+cron.scheduleJob("0 42 4 * * *", async function () {
   console.info("cron scheduler started running");
   await runTimedJob();
 });
