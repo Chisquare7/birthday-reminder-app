@@ -30,6 +30,7 @@
 					placeholder="Enter your Username"
 					class="inputField"
 					required
+					pattern="^[a-zA-Z0-9]+$"
 				/>
 			</label>
 			<label for="email" class="labelContainer inputNameFlex">
@@ -41,6 +42,7 @@
 					placeholder="Enter your Email address"
 					class="inputField"
 					required
+					pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
 				/>
 			</label>
 			<label for="dob" class="labelContainer inputNameFlex">
@@ -52,6 +54,8 @@
 					placeholder="Enter your birthday"
 					class="inputField"
 					required
+					min="1900-01-01"
+					max="2024-12-31"
 				/>
 			</label>
 
