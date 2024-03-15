@@ -5,10 +5,21 @@ const { birthdayEmail } = require("../mailerMessage/birthdayMessages");
 
 async function runTimedJob() {
   try {
-    const todayDate = new Date().toLocaleDateString();
-    console.log("Today's date:", todayDate);
+    const startOfDay = new Date();
+    startOfDay.setUTCHours(0, 0, 0, 0);
 
-    const celebrantsWithBirthdays = await Birthday.find({ dob: todayDate });
+    const todayMonth = startOfDay.getUTCMonth() + 1;
+    const todayDate = startOfDay.getUTCDate();
+
+    const celebrantsWithBirthdays = await Birthday.find({
+      $expr: {
+        $and: [
+          {$eq: [{$month: "$dob"}, todayMonth]},
+          {$eq: [{$dayOfMonth: "$dob"}, todayDate]},
+        ]
+      }
+    });
+
     console.log("Celebrants with birthdays:", celebrantsWithBirthdays);
 
     if (celebrantsWithBirthdays.length !== 0) {
@@ -18,7 +29,7 @@ async function runTimedJob() {
 
       console.log("Email to be sent:", emails);
 
-	  console.log("Celebrants with birthdays:", celebrantsWithBirthdays);
+      console.log("Celebrants with birthdays:", celebrantsWithBirthdays);
       await birthdayEmail(emails, celebrantsWithBirthdays);
       console.log("Emails sent successfully");
     }
