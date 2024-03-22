@@ -22,7 +22,7 @@ app.get("/", async (req, res) => {
   res.sendFile(__dirname + "/public/index.html")
 })
 
-cron.scheduleJob("0 7 * * *", async function () {
+cron.scheduleJob("5 6 * * *", async function () {
   console.info("cron scheduler started running");
   await runTimedJob();
 });
